@@ -1,0 +1,51 @@
+// Default Configuration for AdditionalSettings Mod v1.2.0+
+// This file uses JSONC format (JSON with Comments).
+// Lines starting with // are comments and are ignored by the loader.
+// Make changes here to customize the mod's behavior.
+{
+    // --- Lootability Settings ---
+
+    // Enable/disable making armbands lootable from bodies.
+    // If true, you can take armbands (Parent ID: 5b3f15d486f77432d0509248) found on players/scavs.
+    // Default: true
+    "LootArmbands": true,
+
+    // Enable/disable making melee weapons lootable from bodies.
+    // If true, you can take melee weapons (Parent ID: 5447e1d04bdc2dff2f8b4567) found on players/scavs.
+    // Note: Does not affect your *own* equipped melee if 'SaveMeleeOnDeath' is true.
+    // Default: true
+    "LootMelee": true,
+
+
+    // --- Save Gear on Death Settings ---
+
+    // Prevent losing your equipped armband upon death.
+    // If true, the armband in your ArmBand slot will remain after dying in a raid.
+    // Default: false
+    "SaveArmbandOnDeath": false,
+
+    // Prevent losing your equipped melee weapon upon death.
+    // If true, the weapon in your Scabbard slot will remain after dying in a raid.
+    // Default: false
+    "SaveMeleeOnDeath": false,
+
+
+    // --- Gameplay Tweak Settings ---
+
+    // Disable PMC voice lines triggered after getting a kill or being killed.
+    // If true, sets both 'killer' and 'victim' PMC chat response chances to 0%.
+    // Helps reduce repetitive voice lines or increase immersion for some.
+    // Default: false
+    "disablePMC_ChatResponse": false,
+
+    // Allow the 'MedalMilitaryLega' item (ID: 6656560053eaaa7a23349c86) to be placed inside Money Cases (ID: 59fb016586f7746d0d4b423a).
+    // Default: false
+    "allow_LegaMoneyCase": false
+
+    // Adjust the stack size for 'LegaMedal' (ID: 6656560053eaaa7a23349c86).
+    // Sets the maximum number of medals that can stack in a single inventory slot.
+    // Range: 1 to 999. Values outside this range will be clamped or reset to the default (50).
+    // Default: 50
+    "stacksize_lega": 50
+  
+}
