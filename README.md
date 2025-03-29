@@ -1,4 +1,4 @@
-# Additional Settings for SPT-AKI
+# Additional Settings Mod for SPT (Single Player Tarkov)
 
 <p align="center">
   <img src="./logo.png" alt="Additional Settings Logo" width="150"/>
