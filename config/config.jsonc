@@ -40,7 +40,7 @@
 
     // Allow the 'MedalMilitaryLega' item (ID: 6656560053eaaa7a23349c86) to be placed inside Money Cases (ID: 59fb016586f7746d0d4b423a).
     // Default: false
-    "allow_LegaMoneyCase": false
+    "allow_LegaMoneyCase": false,
 
     // Adjust the stack size for 'LegaMedal' (ID: 6656560053eaaa7a23349c86).
     // Sets the maximum number of medals that can stack in a single inventory slot.
