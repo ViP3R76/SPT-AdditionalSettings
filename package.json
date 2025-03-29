@@ -1,0 +1,23 @@
+{
+  "name": "AdditionalSettings",
+  "version": "1.0.1",
+  "description": "Additional settings mod providing various gameplay tweaks (lootable gear, save on death options, etc.) for SPT ~3.11",
+  "author": "ViP3R_76",
+  "license": "MIT",
+  "main": "src/mod.js",
+  "isBundleMod": false,
+  "sptVersion": "~3.11",
+  "loadBefore": [],
+  "loadAfter": [],
+  "incompatibilities": [],
+  "scripts": {
+    "setup": "npm i",
+    "build": "node build.mjs",
+    "buildinfo": "node build.mjs --verbose"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.0",
+  },
+  "dependencies": {
+  }
+}
