@@ -1,0 +1,78 @@
+// Default Configuration for AdditionalSettings Weather Module (v1.0.2+)
+// This file controls how the in-game season is selected. Only ONE mode is active at a time.
+// This config is ONLY used if "use_weather_module" is set to true in the main config.jsonc file.
+// Precedence Order (Highest to Lowest): Fixed Season > Weighted System > Random System.
+{
+    // --- Mode 1: Fixed Season ---
+    // If true, the season specified by 'fixed_season_index' will ALWAYS be used.
+    // This overrides all other randomization settings (Weighted, Random, Exclusions).
+    // Options: true / false
+    // Default: false
+    "use_fixed_season": false,
+
+    // The specific season to use if 'use_fixed_season' is true. Use numbers only:
+    // 1 = Summer
+    // 2 = Autumn
+    // 3 = Winter
+    // 4 = Spring
+    // 5 = Late Autumn
+    // 6 = Early Spring
+    // 7 = Storm
+    // Invalid numbers (outside 1-7) will default to 1 (Summer).
+    // Options: number (1-7)
+    // Default: 1
+    "fixed_season_index": 1,
+
+
+    // --- Mode 2: Weighted Random System ---
+    // If 'use_fixed_season' is false AND this is true, seasons are chosen randomly based on the weights defined below.
+    // Seasons listed in 'exclude_seasons' will be ignored in this mode.
+    // This overrides the 'use_random_system' setting if true.
+    // Options: true / false
+    // Default: true
+    "use_weight_system": false,
+
+    // Define the weighting for each season (used only if Mode 2 is active).
+    // Higher numbers mean a higher chance of selection relative to the sum of weights of *available* (non-excluded, positive-weight) seasons.
+    // Set a weight to 0 to effectively prevent that season from being chosen in this mode.
+    // Values must be non-negative numbers (e.g., 0, 5, 10.5). Invalid values reset to defaults.
+    // Defaults: Summer=10, Autumn=10, Winter=10, Spring=10, LateAutumn=10, EarlySpring=10, Storm=5
+    "Summer": 80,
+    "Autumn": 50,
+    "Winter": 10,
+    "Spring": 25,
+    "LateAutumn": 20,
+    "EarlySpring": 15,
+    "Storm": 5,
+
+
+    // --- Mode 3: Auto Random System ---
+    // If 'use_fixed_season' is false AND 'use_weight_system' is false AND this is true,
+    // a season will be chosen RANDOMLY (equal chance) based on the 'random_system_mode' below.
+    // If all three mode flags (use_fixed_season, use_weight_system, use_random_system) are false,
+    // this mode (with random_system_mode = 1) acts as the final fallback behavior.
+    // Options: true / false
+    // Default: true
+    "use_random_system": true,
+
+    // Determines the pool for the Auto Random system (used only if Mode 3 is active). Use numbers only:
+    // 0 = Auto All: Randomize equally between ALL seasons (Summer through Storm), ignoring the 'exclude_seasons' list.
+    // 1 = Auto Available: Randomize equally between all seasons EXCEPT those listed in 'exclude_seasons'.
+    // Invalid numbers (not 0 or 1) will default to 1.
+    // Options: 0 / 1
+    // Default: 1
+    "random_system_mode": 1,
+
+
+    // --- Season Exclusion ---
+    // List of season indices (0-6) to EXCLUDE from randomization modes (Weighted, Random Mode 1).
+    // Use the internal index: 0=Summer, 1=Autumn, 2=Winter, 3=Spring, 4=Late Autumn, 5=Early Spring, 6=Storm.
+    // Invalid numbers in this list (outside 0-6) are ignored during processing.
+    // This list does NOT affect specific fixed seasons (Mode 1 with index 1-7).
+    // This list does NOT affect Random Mode 0 ('Auto All').
+    // Safety: If this list includes ALL valid seasons (0-6), Storm (6) will be automatically removed from the exclusion
+    //         to prevent no seasons being available for Random Mode 1 or Weighted mode.
+    // Example: [2, 6] // Exclude Winter and Storm from Weighted and Random Mode 1 pools
+    // Default: [] (empty list, no exclusions)
+    "exclude_seasons": [6]
+}

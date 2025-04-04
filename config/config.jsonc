@@ -1,51 +1,119 @@
-// Default Configuration for AdditionalSettings Mod v1.2.0+
-// This file uses JSONC format (JSON with Comments).
-// Lines starting with // are comments and are ignored by the loader.
-// Make changes here to customize the mod's behavior.
+// Default Configuration for AdditionalSettings Mod
+// File Format: JSON with Comments (JSONC). Comments are ignored by the loader.
+// Edit values below and restart the server for changes to take effect.
 {
-    // --- Lootability Settings ---
+    // --- Module Activation ---
+    // Toggle the integrated sub-modules on or off. Requires server restart.
 
-    // Enable/disable making armbands lootable from bodies.
-    // If true, you can take armbands (Parent ID: 5b3f15d486f77432d0509248) found on players/scavs.
+    // Enable the weather randomization module (uses config_weather.jsonc).
+    // Default: false
+    "use_weather_module": false,
+
+    // Enable modification of quest plant/placement times using multipliers below.
+    // Default: false
+    "use_plant_time_module": false,
+
+    // Enable ammo/grenade weight modification (settings below).
+    // Default: false
+    "use_ammo_module": false,
+
+    // Enable weapon modification module (settings below).
+    // Default: false
+    "use_weapon_module": false,
+
+
+    // --- Core Gameplay Tweaks ---
+
+    // Allow looting armbands (Parent ID: 5b3f15d486f77432d0509248) from bodies.
+    // Note: Some specific items might be internally blacklisted.
     // Default: true
-    "LootArmbands": true,
+    "LootArmbands": false,
 
-    // Enable/disable making melee weapons lootable from bodies.
-    // If true, you can take melee weapons (Parent ID: 5447e1d04bdc2dff2f8b4567) found on players/scavs.
-    // Note: Does not affect your *own* equipped melee if 'SaveMeleeOnDeath' is true.
-    // Default: true
-    "LootMelee": true,
-
-
-    // --- Save Gear on Death Settings ---
-
-    // Prevent losing your equipped armband upon death.
-    // If true, the armband in your ArmBand slot will remain after dying in a raid.
+    // Prevent losing your equipped armband (ArmBand slot) upon death.
     // Default: false
     "SaveArmbandOnDeath": false,
 
-    // Prevent losing your equipped melee weapon upon death.
-    // If true, the weapon in your Scabbard slot will remain after dying in a raid.
+    // Allow looting melee weapons (Parent ID: 5447e1d04bdc2dff2f8b4567) from bodies.
+    // Note: Some specific items (e.g., Kukri) might be internally blacklisted.
+    // Default: true
+    "LootMelee": false,
+
+    // Prevent losing your equipped melee weapon (Scabbard slot) upon death.
     // Default: false
     "SaveMeleeOnDeath": false,
 
-
-    // --- Gameplay Tweak Settings ---
-
-    // Disable PMC voice lines triggered after getting a kill or being killed.
-    // If true, sets both 'killer' and 'victim' PMC chat response chances to 0%.
-    // Helps reduce repetitive voice lines or increase immersion for some.
+    // Control PMC voice line chance after kill/death.
+    // true: Disable entirely (0% chance).
+    // false: Use SPT default behavior.
+    // number (1-100): Set specific percentage chance.
     // Default: false
     "disablePMC_ChatResponse": false,
 
-    // Allow the 'MedalMilitaryLega' item (ID: 6656560053eaaa7a23349c86) to be placed inside Money Cases (ID: 59fb016586f7746d0d4b423a).
+    // Allow 'Lega Medals' (ID: 6656560053eaaa7a23349c86) in Money Cases (ID: 59fb016586f7746d0d4b423a).
     // Default: false
     "allow_LegaMoneyCase": false,
 
-    // Adjust the stack size for 'LegaMedal' (ID: 6656560053eaaa7a23349c86).
-    // Sets the maximum number of medals that can stack in a single inventory slot.
-    // Range: 1 to 999. Values outside this range will be clamped or reset to the default (50).
+    // Max stack size for 'Lega Medals'. Clamped between 1 and 999.
     // Default: 50
-    "stacksize_lega": 50
-  
+    "stacksize_lega": 500,
+
+    // Remove "Found in Raid" requirement for items used in Hideout construction/upgrades.
+    // Default: false
+    "removeFirForHideout": false,
+
+    // Disable SPT's seasonal events (e.g., Christmas trees, Halloween pumpkins).
+    // Modifies server config to prevent activation based on system date.
+    // Default: false
+    "disableSeasonEvents": false,
+
+
+    // --- Plant Time Module Settings (Only used if use_plant_time_module is true) ---
+    // Adjust time multipliers. 1.0 = no change, < 1.0 = faster, > 1.0 = slower. Minimum effective time is 1s.
+    // Values must be non-negative numbers. Invalid values reset to 1.0.
+
+    // Multiplier for 'LeaveItemAtLocation' quest conditions (e.g., placing Markers, USBs).
+    // Default: 1.00
+    "leaveItemAtLocationModifier": 1,
+
+    // Multiplier for 'PlaceBeacon' quest conditions (e.g., placing WI-FI Camera, MS2000).
+    // Default: 1.00
+    "placeBeaconModifier": 1,
+
+
+    // --- Ammo Module Settings (Only used if use_ammo_module is true) ---
+
+    // Set weight of individual ammo rounds (Parent ID: 5485a8684bdc2da71d8b4567) to 0.
+    // Default: false
+    "weightless_ammo": false,
+
+    // Set weight of ammo boxes (Parent ID: 543be5cb4bdc2deb348b4568) to 0.
+    // Default: false
+    "weightless_ammoboxes": false,
+
+    // Set weight of grenades (Parent ID: 543be6564bdc2df4348b4568) to 0.
+    // Default: false
+    "weightless_grenades": false,
+
+
+    // --- Weapon Module Settings (Only used if use_weapon_module is true) ---
+
+    // Adjust specific item 'ExtraSize' properties to potentially shrink their thumbnail view.
+    // IMPORTANT: This is a visual tweak ONLY and does not change the item's actual grid size.
+    // For the visual change to apply, Cache-/Temp-Files need to be deleted in SPT-Launcher!
+    // Default: false
+    "weapon_inv_shrink": false,
+
+
+    // --- Debugging & Maintenance ---
+
+    // Allow the mod to automatically overwrite config files on startup if settings
+    // are missing or invalid. Useful for adding new default settings automatically.
+    // WARNING: This will REMOVE all comments and custom formatting from the file!
+    // Default: false
+    "allow_autoupdate_configs": false,
+
+    // Enable detailed debug messages in the server console for troubleshooting.
+    // Can be very verbose. Keep false unless diagnosing issues.
+    // Default: false
+    "enableDebugLogs": false
 }
