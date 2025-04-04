@@ -10,7 +10,7 @@
 
 ## Description
 
-**Additional Settings Mod (ASM)** provides a collection of configurable gameplay tweaks and optional features for Single Player Tarkov (SPT) versions 3.9.x and likely later versions. It aims to offer quality-of-life improvements and customization options through a modular design and robust configuration handling.
+**Additional Settings Mod (ASM)** provides a collection of configurable gameplay tweaks and optional features for Single Player Tarkov (SPT) versions 3.11.x and likely later versions. It aims to offer quality-of-life improvements and customization options through a modular design and robust configuration handling.
 
 The mod uses SPT's dependency injection and lifecycle hooks (`preSptLoad`, `postDBLoad`, `postSptLoad`) to apply changes safely and at the appropriate times during server startup. Configuration files (`config.jsonc`, `config_weather.jsonc`) are automatically generated with detailed comments on first run if they don't exist.
 
