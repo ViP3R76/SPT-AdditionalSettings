@@ -5,7 +5,7 @@
 </p>
 
 [![SPT Version](https://img.shields.io/badge/SPT%20Version-3.11.x-brightgreen.svg)](https://www.sp-tarkov.com/)
-[![Mod Version](https://img.shields.io/badge/Mod%20Version-1.0.3-blue.svg)]([https://github.com/YourGitHubUsername/YourRepoName](https://github.com/ViP3R76/SPT-AdditionalSettings/releases))
+[![Mod Version](https://img.shields.io/badge/Mod%20Version-1.0.5-blue.svg)]([https://github.com/YourGitHubUsername/YourRepoName](https://github.com/ViP3R76/SPT-AdditionalSettings/releases))
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Description
@@ -14,7 +14,7 @@
 
 The mod uses SPT's dependency injection and lifecycle hooks (`preSptLoad`, `postDBLoad`, `postSptLoad`) to apply changes safely and at the appropriate times during server startup. Configuration files (`config.jsonc`, `config_weather.jsonc`) are automatically generated with detailed comments on first run if they don't exist.
 
-## Features (v1.0.3)
+## Features (v1.0.5)
 
 This mod is modular, allowing you to enable or disable specific groups of features via the main `config.jsonc` file.
 
