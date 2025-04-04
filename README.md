@@ -4,141 +4,143 @@
   <img src="./logo.png" alt="Additional Settings Logo" width="150"/>
 </p>
 
-![version](https://img.shields.io/badge/version-1.0.1-blue)
-![spt_version](https://img.shields.io/badge/SPT-~3.11.x-orange)
-![license](https://img.shields.io/badge/license-MIT-green)
-
-A server-side modification for SPT-AKI that provides several configurable gameplay tweaks. Created by ViP3R_76.
+[![SPT Version](https://img.shields.io/badge/SPT%20Version-3.11.x-brightgreen.svg)](https://www.sp-tarkov.com/)
+[![Mod Version](https://img.shields.io/badge/Mod%20Version-1.0.3-blue.svg)]([https://github.com/YourGitHubUsername/YourRepoName](https://github.com/ViP3R76/SPT-AdditionalSettings/releases))
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Description
 
-This mod allows users to customize various aspects of their SPT experience via a configuration file (`config/config.jsonc`). It modifies the game's database settings (like item properties) and server configurations (like LostOnDeath rules or Bot settings) after they are loaded by the server.
+**Additional Settings Mod (ASM)** provides a collection of configurable gameplay tweaks and optional features for Single Player Tarkov (SPT) versions 3.9.x and likely later versions. It aims to offer quality-of-life improvements and customization options through a modular design and robust configuration handling.
 
-If the configuration file does not exist upon first starting the server with the mod, it will automatically create one with default values and detailed comments explaining each option. This mod uses the standard Node.js file system (`fs`) for config file operations and SPT's `ConfigServer` for modifying server-level configurations, ensuring better compatibility.
+The mod uses SPT's dependency injection and lifecycle hooks (`preSptLoad`, `postDBLoad`, `postSptLoad`) to apply changes safely and at the appropriate times during server startup. Configuration files (`config.jsonc`, `config_weather.jsonc`) are automatically generated with detailed comments on first run if they don't exist.
 
-## Key Features
+## Features (v1.0.3)
 
-*   **Lootable Armbands:** Makes armbands lootable from bodies (respects an internal blacklist for specific items).
-*   **Save Armband on Death:** Prevents the armband in your ArmBand slot from being lost upon death (uses `ConfigServer`).
-*   **Lootable Melee Weapons:** Makes melee weapons lootable from bodies (respects an internal blacklist for specific items like the M48 Kukri).
-*   **Save Melee on Death:** Prevents the melee weapon in your Scabbard slot from being lost upon death (uses `ConfigServer`).
-*   **PMC Chat Response Control:**
-    *   Disable PMC killer/victim voice lines entirely (set chance to 0%).
-    *   Set a specific % chance (1-100) for PMC responses.
-    *   Leave SPT default behavior unchanged. (Uses `ConfigServer`).
-*   **Allow Lega Medals in Money Case:** Modifies the Money Case item filter to allow "LegaMedal" (ID: `6656560053eaaa7a23349c86`) to be placed inside.
-*   **Configurable Lega Medal Stack Size:** Adjust the maximum stack size for "LegaMedal". Defaults to 50, configurable from 1 to 999 (values outside this range are clamped or reset to default).
-*   **Auto-Creating Config:** Automatically generates a commented `config.jsonc` file on first run if one is not found.
-*   **Robustness:** Includes checks for database availability, configuration validity, and includes manual comment stripping during config loading to work around potential environment issues.
+This mod is modular, allowing you to enable or disable specific groups of features via the main `config.jsonc` file.
 
-## Prerequisites
+### Core Gameplay Tweaks (Settings in `config.jsonc`)
 
-*   **SPT:** Version **3.11.1** or later patch versions (e.g., 3.11.2).
-*   Compatibility with future major versions (e.g., 3.12.0) is not guaranteed without updates.
+Handled by `CoreModule`.
+
+*   **Lootable Armbands & Melee:** Makes equipped armbands and melee weapons lootable from bodies (`LootArmbands`, `LootMelee`). Includes an internal blacklist for specific items (e.g., quest items, specific high-value melee).
+*   **PMC Chat Response Control:** Adjust the chance (0-100%) or disable entirely the voice lines PMCs make after getting a kill or being killed (`disablePMC_ChatResponse`).
+*   **Lega Medals in Money Case:** Allows storing the 'Lega' series of collectible medals/coins in Money Cases (`allow_LegaMoneyCase`).
+*   **Configurable Lega Medal Stack Size:** Adjust the maximum stack size for Lega medals (`stacksize_lega`). Clamped between 1-999.
+*   **Remove FIR for Hideout:** Removes the "Found in Raid" requirement for items needed in Hideout module construction and upgrades (`removeFirForHideout`).
+*   **Disable Seasonal Events:** Prevents SPT's built-in seasonal events (e.g., Christmas trees, Halloween pumpkins) from activating based on system date (`disableSeasonEvents`).
+
+### Save Gear on Death (Settings in `config.jsonc`)
+
+Handled by `LostOnDeathModule`.
+
+*   **Save Armbands on Death:** Prevents losing your equipped armband upon death (`SaveArmbandOnDeath`).
+*   **Save Melee on Death:** Prevents losing your equipped melee weapon upon death (`SaveMeleeOnDeath`).
+
+### Optional Weather Module (`use_weather_module: true` in `config.jsonc`)
+
+Handled by `WeatherModule`, configured via `config_weather.jsonc`.
+
+*   **Randomized In-Game Season:** Overrides the default weather/season system.
+*   **Multiple Modes:**
+    *   **Fixed:** Force a specific season (Summer, Autumn, Winter, etc.).
+    *   **Weighted Random:** Choose seasons randomly based on configurable weights.
+    *   **Auto Random:** Choose randomly with equal chance from all seasons or only non-excluded seasons.
+*   **Season Exclusion:** Prevent specific seasons from being selected in random modes.
+*   **FIKA Compatibility:** Automatically hooks into FIKA's raid creation process (`/fika/raid/create`) if FIKA is detected, ensuring season changes apply correctly in multiplayer scenarios.
+
+### Optional Plant Time Module (`use_plant_time_module: true` in `config.jsonc`)
+
+Handled by `PlantTimeModule`.
+
+*   **Adjust Quest Interaction Times:** Modify the time required for "planting" or "placing" quest items (e.g., Markers, Beacons, USBs) using multipliers (`leaveItemAtLocationModifier`, `placeBeaconModifier`). Values < 1.0 speed up, > 1.0 slow down. Minimum time is 1 second.
+
+### Optional Ammo Module (`use_ammo_module: true` in `config.jsonc`)
+
+Handled by `AmmoModule`.
+
+*   **Weightless Ammo/Boxes/Grenades:** Optionally set the weight of individual ammo rounds, ammo boxes, and/or grenades to zero (`weightless_ammo`, `weightless_ammoboxes`, `weightless_grenades`).
+
+### Optional Weapon Module (`use_weapon_module: true` in `config.jsonc`)
+
+Handled by `WeaponModule`.
+
+*   **Inventory Thumbnail Shrink:** Adjusts internal `ExtraSizeUp`/`ExtraSizeDown` properties for a *pre-defined list* of specific magazines and weapon mounts (`weapon_inv_shrink`).
+    *   **IMPORTANT:** This is a visual-only tweak for item thumbnails. It **does not** change the actual grid space the item occupies.
+    *   **You MUST clear the SPT Cache/Temp files via the SPT-Launcher** after enabling this setting for the visual changes to appear in your inventory/stash.
+
+### General Features
+
+*   **Debug Logging:** Global option (`enableDebugLogs`) to enable detailed console logs for troubleshooting all parts of the mod. Can be very verbose.
+*   **Modular Design:** Separates distinct functionalities into their own files/classes for better organization and maintainability.
+*   **Robust Configuration:** Auto-creates default configs with comments, validates settings on load (resetting invalid values to defaults and logging warnings), handles basic syntax errors (like trailing commas), and optionally auto-updates config files if settings are missing/invalid (`allow_autoupdate_configs` - **Warning:** This removes comments/formatting!).
 
 ## Installation
 
-1.  **Download:** Download the latest release `.zip` file from the [Releases](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME/releases) page.
-2.  **Extract:** Extract the contents of the `.zip` file. You should have a folder named `user`.
-3.  **Copy to Mods:** Copy the *entire* `user` folder into your SPT `root` directory.
-4.  **Verify:** The final structure should look like this:
+1.  Download the latest release `.zip` file from the [Releases Page](https://github.com/YourGitHubUsername/YourRepoName/releases). <!-- Update link -->
+2.  Extract the contents of the `.zip` file.
+3.  Copy the `vip3r76-AdditionalSettings` folder into your SPT `user/mods/` directory.
+4.  Your directory structure should look like this:
     ```
-    <SPT_Install_Directory>/
-    ├── user/
-    │   ├── mods/
-    │   │   ├── vip3r76-AdditionalSettings/   <-- Mod folder
-    │   │   │   ├── config/
-    │   │   │   │   └── config.jsonc          (Will be created on first run)
-    │   │   │   ├── src/
-    │   │   │   │   ├── mod.ts
-    │   │   │   │   └── configCreation.ts
-    │   │   │   ├── package.json
-    │   │   └── ... (other mods)
-    │   └── ... (other user folders)
-    └── ... (other SPT folders)
+    SPT_Directory/
+    └── user/
+        └── mods/
+            └── vip3r76-AdditionalSettings/
+                ├── config/
+                ├── src/
+                ├── package.json
+                ├── LICENSE
+                └── README.md
     ```
-5.  **Start Server:** Start the SPT server. The mod will load, and if necessary, create the default `config/config.jsonc` file. Check the server console for messages from `[AdditionalSettings v1.0.1]`.
-
-## Compatibility
-
-- Generally compatible with other mods that do not modify the same specific item properties (Unlootable, StackMaxSize), container filters (MoneyCase), or server configurations (LostOnDeath, PmcChatResponse).
-- Since this mod uses ConfigServer for LostOnDeath and PmcChatResponse, it should generally be compatible with other mods that also use ConfigServer correctly for those settings (the last mod loaded usually wins if modifying the same value). Direct modification of tables.globals or tables.bots by other mods for these settings might lead to conflicts or unexpected behavior.
-- Load order (loadBefore/loadAfter in package.json) is not currently specified but might be relevant if direct conflicts arise with other mods.
-- "Should" work with FIKA without issues.
-- No known incompatibilities at this time.
-
-## Contributing
-Bug reports and feature suggestions are welcome! Please create an issue on the GitHub repository Issues page.
-
-## License
-This mod is distributed under the MIT License.
 
 ## Configuration
 
-The mod's behavior is controlled by the `config.jsonc` file located at:
-`<SPT_Install_Directory>/user/mods/vip3r76-AdditionalSettings/config/config.jsonc`
+Upon first starting the SPT Server after installing the mod, configuration files will be automatically generated in the `user/mods/vip3r76-AdditionalSettings/config/` directory:
 
-*   This file uses **JSONC** format, which allows comments (lines starting with `//`).
-*   If the file or the `config` directory doesn't exist when you start the server, the mod will create them with the default settings and comments below.
-*   Edit the values (e.g., change `true` to `false`, or adjust numbers) to customize the mod. **Save the file and restart the SPT server** for changes to take effect.
+*   `config.jsonc`: Controls core features and enables/disables optional modules.
+*   `config_weather.jsonc`: Configures the Weather module (only used if `use_weather_module` is `true`).
 
-```jsonc
-// Default Configuration for AdditionalSettings Mod v1.0.1+
-// This file uses JSONC format (JSON with Comments). Comments are ignored by the loader.
-// Edit the values below to customize the mod's behavior. Restart server for changes to apply.
-{
-    // --- Lootability Settings ---
+These files use the `.jsonc` format (JSON with Comments). Open them with a text editor that supports this format (like VS Code, Notepad++, etc.).
 
-    // Enable/disable making armbands lootable from bodies.
-    // If true, armbands (Parent ID: 5b3f15d486f77432d0509248) found on AI/players can be looted.
-    // Note: Specific items might be internally blacklisted by the mod and remain unlootable.
-    // Default: true
-    "LootArmbands": true,
+*   Read the comments within the files carefully to understand each setting.
+*   Modify the values as desired (e.g., change `true` to `false`, adjust numbers).
+*   **Restart the SPT Server** for any configuration changes to take effect.
 
-    // Enable/disable making melee weapons lootable from bodies.
-    // If true, melee weapons (Parent ID: 5447e1d04bdc2dff2f8b4567) found on AI/players can be looted.
-    // Note: Does not affect your *own* equipped melee if 'SaveMeleeOnDeath' is true.
-    // Note: Specific items (e.g., M48 Kukri) might be internally blacklisted and remain unlootable.
-    // Default: true
-    "LootMelee": true,
+**Note on `allow_autoupdate_configs`:**
 
+*   If set to `true` in `config.jsonc`, the mod will attempt to automatically add missing settings (from mod updates) or reset invalid values to their defaults *and overwrite your config file*.
+*   **WARNING:** Enabling this will **REMOVE ALL COMMENTS** and custom formatting from your config file(s) when an update occurs. It is generally recommended to keep this `false` and manually update your config if needed, using the default config as a reference.
 
-    // --- Save Gear on Death Settings ---
+**Note on `weapon_inv_shrink`:**
 
-    // Prevent losing your equipped armband upon death.
-    // If true, the armband in your 'ArmBand' slot will remain after dying in a raid.
-    // Note: Other mods might override this setting. Uses ConfigServer.
-    // Default: false
-    "SaveArmbandOnDeath": false,
+*   If you enable `weapon_inv_shrink: true` in `config.jsonc`, remember to use the SPT-Launcher to **"Clear Cache Files" / "Clear Temp Files"** before launching the game to see the visual thumbnail changes.
 
-    // Prevent losing your equipped melee weapon upon death.
-    // If true, the weapon in your 'Scabbard' slot will remain after dying in a raid.
-    // Note: Other mods might override this setting. Uses ConfigServer.
-    // Default: false
-    "SaveMeleeOnDeath": false,
+## Uninstallation
 
+1.  Delete the `vip3r76-AdditionalSettings` folder from your SPT `user/mods/` directory.
+2.  If you used the `weapon_inv_shrink` feature, clear the SPT Cache/Temp files via the launcher one last time to potentially revert thumbnail visuals (though this might not always fully revert).
 
-    // --- Gameplay Tweak Settings ---
+## Compatibility
 
-    // Adjust PMC voice lines triggered after getting a kill or being killed.
-    // Accepts:
-    //   - true:  Disable responses entirely (set chance to 0%).
-    //   - false: Use default SPT values (this mod applies no changes).
-    //   - number (1-100): Set response chance to this specific percentage for both killer and victim.
-    // Values outside the 1-100 range (if a number is used) will be reset to 'false' (default behavior).
-    // Uses ConfigServer.
-    // Default: false
-    "disablePMC_ChatResponse": false,
+*   **SPT Version:** Developed and tested primarily for SPT 3.11.x. May work on adjacent versions but compatibility is not guaranteed.
+*   **Other Mods:** Designed to be generally compatible.
+    *   Uses `ConfigServer` for modifying server settings (like Lost on Death, PMC Chat) where possible, reducing conflicts.
+    *   Direct database modifications (items, quests, hideout) are performed in `postDBLoad` and *could* conflict if another mod modifies the exact same properties *after* this mod runs. Order of mod loading can matter in such cases.
+    *   Includes specific compatibility handling for **FIKA (ServerMod)** in the Weather module.
 
-    // Allow 'Lega Medals' to be placed in Money Cases.
-    // If true, modifies the Money Case filter (ID: 59fb016586f7746d0d4b423a)
-    // to accept 'MedalMilitaryLega' (ID: 6656560053eaaa7a23349c86).
-    // Default: false
-    "allow_LegaMoneyCase": false,
+## Known Issues
 
-    // Adjust the stack size for 'LegaMedal' (ID: 6656560053eaaa7a23349c86).
-    // Sets the maximum number of medals that can stack in a single inventory slot.
-    // Range: 1 to 999. Values outside this range will be clamped or reset to the default (50).
-    // Default: 50
-    "stacksize_lega": 50
-}
+*   The `weapon_inv_shrink` feature requires manual cache clearing for visual changes. This is a limitation of how the client handles item icons.
+*   The `allow_autoupdate_configs` feature removes comments and formatting from config files when triggered.
+
+## Contributing / Development
+
+*   Bug reports and feature suggestions are welcome via the GitHub Issues page.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+*   The SPT Team for creating and maintaining the framework.
+*   The SPT Modding Community.
